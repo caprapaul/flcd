@@ -1,7 +1,7 @@
 # Documentation
 ###### Source code: https://github.com/caprapaul/flcd/tree/lab_02
 ### Symbol Table
-#
+
 Implemented as a hash table using an array of lists. The lists are used to handle collisions.
 
 #### Hash(symbol)
