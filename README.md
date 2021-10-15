@@ -11,10 +11,14 @@ Computes a hash code by adding the ASCII code of the symbol's characters.
 
 #### Add(symbol)
 Adds a symbol to the table.
+
 **in**: *symbol*: a symbol
+
 **out**: an object containing the hash and the index of the added symbol or null if the symbol already exists
 
 #### FindPosition(symbol)
 Finds the position of a symbol in the table.
+
 **in**: *symbol*: a symbol
+
 **out**: an object containing the hash and the index of the added symbol or null if the symbol does not exist
