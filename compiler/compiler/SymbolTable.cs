@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace lab_02
+namespace compiler
 {
     public class SymbolTable : ISymbolTable
     {

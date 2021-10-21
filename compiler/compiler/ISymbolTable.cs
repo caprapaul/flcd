@@ -1,4 +1,4 @@
-﻿namespace lab_02
+﻿namespace compiler
 {
     public interface ISymbolTable
     {
