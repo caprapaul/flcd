@@ -1,0 +1,22 @@
+let numbers: [i32; 100];
+let n: i32;
+let sum: i32;
+let i: i32;
+
+n = read;
+
+i = 0;
+
+while (i < n)
+{
+  numbers[i] = read;
+}
+
+i = 0;
+
+while (i < n)
+{
+  sum = sum + numbers[i];
+}
+
+print(sum);

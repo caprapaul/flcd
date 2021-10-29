@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace compiler
 {
-    public class SymbolTable : ISymbolTable
+    public class SymbolTable
     {
-        private const int InitialCapacity = 16;
+        private const int InitialCapacity = 1009;
         
         public int Capacity { get; private set; }
         public int Length { get; private set; }
@@ -19,63 +19,45 @@ namespace compiler
             _symbols = new List<string>[Capacity];
         }
 
-        public Position? Add(string symbol)
+        public Position Position(string symbol)
         {
-            if (Length >= Capacity)
-            {
-                Grow();
-            }
+            // if (Length >= Capacity)
+            // {
+            //     Grow();
+            // }
             
-            Position? position = Add(ref _symbols, symbol);
+            Position position = Add(ref _symbols, symbol);
             Length++;
 
             return position;
         }
 
-        private Position? Add(ref List<string>[] symbols, string symbol)
+        private Position Add(ref List<string>[] symbols, string symbol)
         {
             int hash = Hash(symbol) % Capacity;
             symbols[hash] ??= new List<string>();
+            List<string> list = symbols[hash];
 
-            if (symbols[hash].Contains(symbol))
+            int index = list.FindIndex(s => s.Equals(symbol));
+
+            if (index != -1)
             {
-                return null;
+                return new Position
+                {
+                    Hash = hash,
+                    Index = index
+                };
             }
-
+            
             symbols[hash].Add(symbol);
 
             return new Position
             {
                 Hash = hash,
-                Index = (symbols[hash].Count - 1)
+                Index = symbols[hash].Count - 1
             };
         }
-
-        public Position? FindPosition(string symbol)
-        {
-            int hash = Hash(symbol) % Capacity;
-
-            var list = _symbols[hash];
-            
-            if (list == null)
-            {
-                return null;
-            }
-
-            var index = list.FindIndex(s => s.Equals(symbol));
-
-            if (index == -1)
-            {
-                return null;
-            }
-
-            return new Position
-            {
-                Hash = hash,
-                Index = index
-            };
-        }
-
+        
         private int Hash(string symbol)
         {
             return symbol.Select(c => (int) c).Sum();
@@ -95,6 +77,22 @@ namespace compiler
             }
 
             _symbols = newSymbols;
+        }
+
+        public override string ToString()
+        {
+            return _symbols.Select((tokens, index) =>
+                {
+                    if (tokens == null)
+                    {
+                        return "";
+                    }
+                    
+                    string values = string.Join(",", tokens);
+                    return $"{index}: [{values}]";
+                })
+                .Where(s => !string.IsNullOrEmpty(s))
+                .Aggregate((s1, s2) => $"{s1}\n{s2}");;
         }
     }
 }

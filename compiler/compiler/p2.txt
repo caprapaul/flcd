@@ -1,0 +1,23 @@
+let x: i32;
+let is_prime: bool;
+let i: i32;
+
+x = read;
+i = x;
+
+while ((i < x / -2) && !is_prime)
+{
+  if (x % i == 0)
+  {
+    is_prime = true;
+  }
+}
+
+if (is_prime)
+{
+  print("prime");
+}
+else
+{
+  print("not prime");
+}
