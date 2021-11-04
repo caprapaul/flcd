@@ -10,13 +10,13 @@ i = 0;
 while (i < n)
 {
   numbers[i] = read;
-}
+};
 
 i = 0;
 
 while (i < n)
 {
   sum = sum + numbers[i];
-}
+};
 
 print(sum);
