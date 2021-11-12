@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -33,17 +34,24 @@ namespace compiler
             List<char> chars = sequence.ToList();
             string currentState = Data.InitialState;
 
-            for (int index = sequence.Length - 1; index >= 0; index--)
+            foreach (char c in sequence)
             {
-                chars.RemoveAt(index);
-                char c = sequence[index];
-                string nextState = GetNextState(currentState, c.ToString());
-                
-                if (nextState == null)
+                if (!Data.Transitions.ContainsKey(currentState))
                 {
-                    break;
+                    return Data.FinalStates.Contains(currentState) && chars.Count == 0;
                 }
 
+                string nextState = Data.Transitions[currentState]
+                    .Where(transition => transition.Label == c.ToString())
+                    .Select(transition => transition.ToState)
+                    .FirstOrDefault();
+
+                if (nextState == null)
+                {
+                    return Data.FinalStates.Contains(currentState) && chars.Count == 0;
+                }
+                
+                chars.RemoveAt(0);
                 currentState = nextState;
             }
 
@@ -59,7 +67,8 @@ namespace compiler
             
             List<Transition> transitions = Data.Transitions[currentState];
 
-            return transitions.Where(transition => transition.Label == c)
+
+            return transitions
                 .Select(transition => transition.ToState)
                 .FirstOrDefault();
         }

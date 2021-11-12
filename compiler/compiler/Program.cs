@@ -46,9 +46,15 @@ namespace compiler
             Console.WriteLine($"Alphabet: \n{fa.Data.AlphabetString()}");
             Console.WriteLine($"States: \n{fa.Data.StatesString()}");
             Console.WriteLine($"Final States: \n{fa.Data.FinalStatesString()}");
+            Console.WriteLine($"Initial State: \n{fa.Data.InitialState}");
             Console.WriteLine($"Transitions: \n{fa.Data.TransitionsString()}");
-            Console.WriteLine($"Check 'qwwq': \n{fa.Check("qwwq")}");
-            Console.WriteLine($"Check 'qwe': \n{fa.Check("qwe")}");
+            Console.WriteLine($"Check '1011000': \n{fa.Check("1011000")}");
+            Console.WriteLine($"Check '1011': \n{fa.Check("1011")}");
+            Console.WriteLine($"Check '1010': \n{fa.Check("1010")}");
+            Console.WriteLine($"Check '0': \n{fa.Check("0")}");
+            Console.WriteLine($"Check '1': \n{fa.Check("1")}");
+            Console.WriteLine($"Check '': \n{fa.Check("")}");
+            Console.WriteLine($"Check '02': \n{fa.Check("02")}");
         }
     }
 }

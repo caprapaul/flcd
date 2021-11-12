@@ -6,12 +6,22 @@
   "Transitions": {
     "p": [
       {
-      "ToState": "q",
-      "Label": "q"
+      "ToState": "p",
+      "Label": "1"
       },
       {
         "ToState": "q",
-        "Label": "w"
+        "Label": "0"
+      }
+    ],
+    "q": [
+      {
+        "ToState": "p",
+        "Label": "1"
+      },
+      {
+        "ToState": "q",
+        "Label": "0"
       }
     ]
   }
