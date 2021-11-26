@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace compiler
 {
@@ -26,7 +26,7 @@ namespace compiler
         {
             using var file = new StreamReader(filePath);
             string json = file.ReadToEnd();
-            Data = JsonSerializer.Deserialize<FiniteAutomataData>(json);
+            Data = JsonConvert.DeserializeObject<FiniteAutomataData>(json);
         }
 
         public bool Check(string sequence)

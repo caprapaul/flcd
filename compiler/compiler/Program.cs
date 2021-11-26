@@ -19,6 +19,7 @@ namespace compiler
                 .AddSingleton<ProgramInternalForm>()
                 .AddSingleton<Scanner>()
                 .AddSingleton<FiniteAutomata>()
+                .AddSingleton<Grammar>()
                 .BuildServiceProvider();
 
             var scanner = services.GetRequiredService<Scanner>();
@@ -40,6 +41,11 @@ namespace compiler
                 Console.WriteLine(e.Message);
             }
             
+            Grammar(services);
+        }
+
+        private static void FA(ServiceProvider services)
+        {
             var fa = services.GetRequiredService<FiniteAutomata>();
             fa.LoadData("FA.json");
             Console.WriteLine($"FA is deterministic: {fa.IsDeterministic}");
@@ -55,6 +61,14 @@ namespace compiler
             Console.WriteLine($"Check '1': \n{fa.Check("1")}");
             Console.WriteLine($"Check '': \n{fa.Check("")}");
             Console.WriteLine($"Check '02': \n{fa.Check("02")}");
+        }
+        
+        private static void Grammar(ServiceProvider services)
+        {
+            var grammar = services.GetRequiredService<Grammar>();
+            grammar.LoadData("g2.json");
+            Console.WriteLine($"{grammar.Data}");
+            Console.WriteLine($"Is context free: {grammar.IsContextFree}");
         }
     }
 }

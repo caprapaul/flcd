@@ -1,47 +1,4 @@
-# Documentation
-
-###### Source code: https://github.com/caprapaul/flcd/tree/lab_05
-
-## Grammar
-
-The grammar is read from a json file. 
-
-To check if it is context free we check if the left side of all production rules contains exactly one nonterminal.
-
-### g1
-
-```json
-{
-  "NonTerminals": ["S", "A", "B", "C"],
-  "Terminals": ["(", ")", "+", "*", "int", "E"],
-  "StartingSymbol": "S",
-  "ProductionRules": {
-    "S": [
-      "A B"
-    ],
-    "A": [
-      "( S )",
-      "int C"
-    ],
-    "B": [
-      "+ S",
-      "E"
-    ],
-    "C": [
-      "* A",
-      "E"
-    ]
-  }
-}
-
-```
-
-
-
-### g2
-
-```json
-{
+﻿{
     "NonTerminals": [
         "program",
         "statement_list",
@@ -156,4 +113,3 @@ To check if it is context free we check if the left side of all production rules
         "array_type": ["[ type ; const ]"]
     }
 }
-```
