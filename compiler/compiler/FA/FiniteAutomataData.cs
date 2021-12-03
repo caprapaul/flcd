@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
-namespace compiler
+namespace compiler.FA
 {
     public class FiniteAutomataData
     {
@@ -14,18 +13,18 @@ namespace compiler
         public string StatesString()
         {
             return string.Join(",", States);
-        }        
-        
+        }
+
         public string FinalStatesString()
         {
             return string.Join(",", FinalStates);
         }
-        
+
         public string AlphabetString()
         {
             return string.Join(",", Alphabet);
         }
-        
+
         public string TransitionsString()
         {
             var result = "";
@@ -37,7 +36,7 @@ namespace compiler
                     result += $"({key}, '{transition.Label}') = {transition.ToState}\n";
                 }
             }
-            
+
             return result;
         }
     }

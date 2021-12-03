@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace compiler
+namespace compiler.Scanner
 {
     public class Scanner
     {
@@ -10,12 +10,13 @@ namespace compiler
         private const string Operators = @"+-*/%<>|&";
         private const string Alphabet = @"a-zA-Z0-9_\[\]{}%():; +-*/=<>&|!";
 
-        private static readonly Func<string, (string, string)>[] Patterns = 
+        private static readonly Func<string, (string, string)>[] Patterns =
         {
             // Keywords
             line =>
             {
-                string token = Regex.Match(line, $@"^(let|const|if|else|while|i32|bool|char|print|read)(?=[{Separators}]|$)")
+                string token = Regex.Match(line,
+                        $@"^(let|const|if|else|while|i32|bool|char|print|read)(?=[{Separators}]|$)")
                     .Value;
                 return (token, token);
             },
@@ -24,7 +25,6 @@ namespace compiler
             {
                 string token = Regex.Match(line, $@"^([0-9]+)(?=[{Separators}]|$)").Value;
                 return ("const", token);
-
             },
             // Composed operators
             line =>
@@ -67,12 +67,13 @@ namespace compiler
             {
                 string token = Regex.Match(line, $@"^([a-zA-Z_][a-zA-Z0-9_]*)(?=[{Separators}]|$)").Value;
                 return ("id", token);
-            },
+            }
         };
-        
-        private readonly SymbolTable _symbolTable;
+
         private readonly ProgramInternalForm _programInternalForm;
-        
+
+        private readonly SymbolTable _symbolTable;
+
         public Scanner(SymbolTable symbolTable, ProgramInternalForm programInternalForm)
         {
             _symbolTable = symbolTable;
@@ -82,9 +83,9 @@ namespace compiler
         public void Scan(string filePath)
         {
             using var file = new StreamReader(filePath);
-            var counter = 0;  
-            string line;  
-  
+            var counter = 0;
+            string line;
+
             while ((line = file.ReadLine()) != null)
             {
                 counter++;
@@ -120,17 +121,17 @@ namespace compiler
                             Position position = _symbolTable.Position(token);
                             _programInternalForm.Add(tokenType, position);
                             break;
-                        
+
                         default:
                             _programInternalForm.Add(token, Position.None);
                             break;
                     }
-                    
+
                     line = line[forward..];
                 }
-            }  
-                
-            file.Close();  
+            }
+
+            file.Close();
         }
     }
 }

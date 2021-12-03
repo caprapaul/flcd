@@ -1,6 +1,18 @@
 ﻿{
-  "NonTerminals": ["S", "A", "B", "C"],
-  "Terminals": ["(", ")", "+", "*", "int", "E"],
+  "NonTerminals": [
+    "S",
+    "A",
+    "B",
+    "C"
+  ],
+  "Terminals": [
+    "(",
+    ")",
+    "+",
+    "*",
+    "int",
+    "E"
+  ],
   "StartingSymbol": "S",
   "ProductionRules": {
     "S": [

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace compiler
+namespace compiler.FA
 {
     public class FiniteAutomata
     {
         public FiniteAutomataData Data { get; private set; }
+
         public bool IsDeterministic
         {
             get
@@ -50,7 +50,7 @@ namespace compiler
                 {
                     return Data.FinalStates.Contains(currentState) && chars.Count == 0;
                 }
-                
+
                 chars.RemoveAt(0);
                 currentState = nextState;
             }
@@ -64,7 +64,7 @@ namespace compiler
             {
                 return null;
             }
-            
+
             List<Transition> transitions = Data.Transitions[currentState];
 
 

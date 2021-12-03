@@ -6,10 +6,7 @@ namespace compiler
     public class SymbolTable
     {
         private const int InitialCapacity = 1009;
-        
-        public int Capacity { get; private set; }
-        public int Length { get; private set; }
-        
+
         private List<string>[] _symbols;
 
         public SymbolTable()
@@ -19,13 +16,16 @@ namespace compiler
             _symbols = new List<string>[Capacity];
         }
 
+        public int Capacity { get; private set; }
+        public int Length { get; private set; }
+
         public Position Position(string symbol)
         {
             // if (Length >= Capacity)
             // {
             //     Grow();
             // }
-            
+
             Position position = Add(ref _symbols, symbol);
             Length++;
 
@@ -48,7 +48,7 @@ namespace compiler
                     Index = index
                 };
             }
-            
+
             symbols[hash].Add(symbol);
 
             return new Position
@@ -57,7 +57,7 @@ namespace compiler
                 Index = symbols[hash].Count - 1
             };
         }
-        
+
         private int Hash(string symbol)
         {
             return symbol.Select(c => (int) c).Sum();
@@ -67,10 +67,10 @@ namespace compiler
         {
             Capacity *= 2;
             var newSymbols = new List<string>[Capacity];
-            
-            foreach (var entry in _symbols)
+
+            foreach (List<string> entry in _symbols)
             {
-                foreach (var symbol in entry)
+                foreach (string symbol in entry)
                 {
                     Add(ref newSymbols, symbol);
                 }
@@ -87,12 +87,13 @@ namespace compiler
                     {
                         return "";
                     }
-                    
+
                     string values = string.Join(",", tokens);
                     return $"{index}: [{values}]";
                 })
                 .Where(s => !string.IsNullOrEmpty(s))
-                .Aggregate((s1, s2) => $"{s1}\n{s2}");;
+                .Aggregate((s1, s2) => $"{s1}\n{s2}");
+            ;
         }
     }
 }

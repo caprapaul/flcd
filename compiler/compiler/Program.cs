@@ -1,38 +1,40 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using compiler.FA;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace compiler
 {
-    class Program
+    internal class Program
     {
         private static void Main(string[] args)
         {
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", false)
                 .Build();
-            
+
             ServiceProvider services = new ServiceCollection()
                 .AddSingleton(configuration)
                 .AddSingleton<SymbolTable>()
                 .AddSingleton<ProgramInternalForm>()
-                .AddSingleton<Scanner>()
+                .AddSingleton<Scanner.Scanner>()
                 .AddSingleton<FiniteAutomata>()
-                .AddSingleton<Grammar>()
+                .AddSingleton<Parser.Grammar>()
                 .BuildServiceProvider();
 
-            var scanner = services.GetRequiredService<Scanner>();
+            var scanner = services.GetRequiredService<Scanner.Scanner>();
             try
             {
                 scanner.Scan(configuration["File"]);
-                
+
                 var st = services.GetRequiredService<SymbolTable>();
                 var pif = services.GetRequiredService<ProgramInternalForm>();
 
                 using var stWriter = new StreamWriter("ST.out");
                 using var pifWriter = new StreamWriter("PIF.out");
-            
+
                 stWriter.Write(st.ToString());
                 pifWriter.Write(pif.ToString());
             }
@@ -40,7 +42,7 @@ namespace compiler
             {
                 Console.WriteLine(e.Message);
             }
-            
+
             Grammar(services);
         }
 
@@ -62,13 +64,17 @@ namespace compiler
             Console.WriteLine($"Check '': \n{fa.Check("")}");
             Console.WriteLine($"Check '02': \n{fa.Check("02")}");
         }
-        
+
         private static void Grammar(ServiceProvider services)
         {
-            var grammar = services.GetRequiredService<Grammar>();
+            var grammar = services.GetRequiredService<Parser.Grammar>();
             grammar.LoadData("g2.json");
             Console.WriteLine($"{grammar.Data}");
             Console.WriteLine($"Is context free: {grammar.IsContextFree}");
+            Console.WriteLine(
+                $"Productions for 'expression': {grammar.GetProductions("expression").Select(p => string.Join(" ", p)).Aggregate((s1, s2) => $"{s1} | {s2}")}");
+            Console.WriteLine(
+                $"Productions for 'while_expression': {grammar.GetProductions("while_expression").Select(p => string.Join(" ", p)).Aggregate((s1, s2) => $"{s1} | {s2}")}");
         }
     }
 }
