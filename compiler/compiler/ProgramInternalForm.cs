@@ -7,6 +7,8 @@ namespace compiler
     {
         private readonly List<(string, Position)> _items = new();
 
+        public List<(string, Position)> Items => _items;
+
         public void Add(string token, Position position)
         {
             _items.Add((token, position));

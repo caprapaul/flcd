@@ -24,7 +24,7 @@ namespace compiler.Scanner
             line =>
             {
                 string token = Regex.Match(line, $@"^([0-9]+)(?=[{Separators}]|$)").Value;
-                return ("const", token);
+                return ("constant", token);
             },
             // Composed operators
             line =>
@@ -48,25 +48,25 @@ namespace compiler.Scanner
             line =>
             {
                 string token = Regex.Match(line, @"^(""[a-zA-Z0-9 _]*"")").Value;
-                return ("const", token);
+                return ("constant", token);
             },
             // Char constant
             line =>
             {
                 string token = Regex.Match(line, @"^('[a-zA-Z0-9 _]')").Value;
-                return ("const", token);
+                return ("constant", token);
             },
             // Bool constant
             line =>
             {
                 string token = Regex.Match(line, $@"^(true|false)(?=[{Separators}]|$)").Value;
-                return ("const", token);
+                return ("constant", token);
             },
             // Identifier
             line =>
             {
                 string token = Regex.Match(line, $@"^([a-zA-Z_][a-zA-Z0-9_]*)(?=[{Separators}]|$)").Value;
-                return ("id", token);
+                return ("identifier", token);
             }
         };
 
@@ -117,7 +117,7 @@ namespace compiler.Scanner
 
                     switch (tokenType)
                     {
-                        case "const" or "id":
+                        case "constant" or "identifier":
                             Position position = _symbolTable.Position(token);
                             _programInternalForm.Add(tokenType, position);
                             break;

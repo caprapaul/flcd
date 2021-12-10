@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using compiler.FA;
+using compiler.Parser;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,9 +20,10 @@ namespace compiler
                 .AddSingleton(configuration)
                 .AddSingleton<SymbolTable>()
                 .AddSingleton<ProgramInternalForm>()
-                .AddSingleton<Scanner.Scanner>()
-                .AddSingleton<FiniteAutomata>()
+                .AddTransient<Scanner.Scanner>()
+                .AddTransient<FiniteAutomata>()
                 .AddSingleton<Parser.Grammar>()
+                .AddTransient<Parser.Parser>()
                 .BuildServiceProvider();
 
             var scanner = services.GetRequiredService<Scanner.Scanner>();
@@ -43,7 +45,8 @@ namespace compiler
                 Console.WriteLine(e.Message);
             }
 
-            Grammar(services);
+            // Grammar(services);
+            Parse(services);
         }
 
         private static void FA(ServiceProvider services)
@@ -75,6 +78,47 @@ namespace compiler
                 $"Productions for 'expression': {grammar.GetProductions("expression").Select(p => string.Join(" ", p)).Aggregate((s1, s2) => $"{s1} | {s2}")}");
             Console.WriteLine(
                 $"Productions for 'while_expression': {grammar.GetProductions("while_expression").Select(p => string.Join(" ", p)).Aggregate((s1, s2) => $"{s1} | {s2}")}");
+        }
+
+        private static void Parse(ServiceProvider services)
+        {
+            var grammar = services.GetRequiredService<Parser.Grammar>();
+            var pif = services.GetRequiredService<ProgramInternalForm>();
+
+            try
+            {
+                grammar.LoadData("g1.json");
+                var parser = services.GetRequiredService<Parser.Parser>();
+                var input = "( a + a ) * ( a + a )";
+                
+                Console.WriteLine($"Parsing '{input}' with grammar 'g1.json'...");
+                ParserOutput output = parser.Run(input.Split(" ").ToList());
+                Console.WriteLine("Done");
+                Console.WriteLine(output);
+                using var writer = new StreamWriter("parser_out1.txt");
+                writer.Write(output.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
+            try
+            {
+                grammar.LoadData("g2.json");
+                var parser = services.GetRequiredService<Parser.Parser>();
+                
+                Console.WriteLine("Parsing 'p1.txt' with grammar 'g2.json'...");
+                ParserOutput output = parser.Run(pif.Items.Select((entry) => entry.Item1).ToList());
+                Console.WriteLine("Done");
+                using var writer = new StreamWriter("parser_out2.txt");
+
+                writer.Write(output.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

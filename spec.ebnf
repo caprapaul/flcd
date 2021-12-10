@@ -17,44 +17,43 @@ Alphabet:
 
   b. identifiers:
       -a sequence of letters and digits, such that the first character is a letter
-    identifier ::= (letter | "_") {letter | digit | "_"}
-    letter ::= "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
-    digit ::= "0" | "1" | ... | "9"
+    identifier -> (letter | "_") {letter | digit | "_"}
+    letter -> "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
+    digit -> "0" | "1" | ... | "9"
 
   c. constants
     1. integer:
-      const_int ::= digit {digit}
+      const_int -> digit {digit}
 
     2. character:
-      const_char ::= "'" char "'"
-      char ::= letter | digit | symbol
-      symbol ::= " " | "_"
+      const_char -> "'" char "'"
+      char -> letter | digit | symbol
+      symbol -> " " | "_"
 
     3. string:
-      const_string ::= '"' string '"'
-      string ::= {char}
+      const_string -> '"' string '"'
+      string -> {char}
 
     4. boolean:
-      const_bool ::= "true" | "false"
+      const_bool -> "true" | "false"
 
 2. Syntax:
-  program ::= statement_list
+  program -> statement_list
 
-  statement_list ::= statement 
+  statement_list -> statement 
     | statement statement_list
-  statement ::= declare_statement
+  statement -> declare_statement
     | expression_statement
     | ";"
-  declare_statement ::= "let" identifier ":" type ";"
-  expression_statement ::= expression ";"
-  const ::= const_bool 
+  declare_statement -> "let" identifier ":" type ";"
+  expression_statement -> expression ";"
+  const -> const_bool 
     | const_char 
     | const_string 
     | const_int
 
-  expression ::= const
+  expression -> const
     | identifier
-    | block_expression
     | assign_expression
     | if_expression
     | while_expression
@@ -66,28 +65,205 @@ Alphabet:
     | index_expression
     | array_expression
 
-  block_expression ::= "{" block_content "}"
-  block_content ::= statement_list | statement_list expression
-  assign_expression ::= identifier "=" expression
-  if_expression ::= "if" "(" expression ")" block_expression
-  while_expression ::= "while" "(" expression ")" block_expression
-  print_expression ::= "print" "(" expression ")"
-  read_expression ::= "read"
-  index_expression ::= expression "[" expression "]"
-  array_expression ::= "[" array_elements "]"
-  array_elements ::= expression | expression "," array_elements
+    expression_no_binary -> const
+    | identifier
+    | assign_expression
+    | if_expression
+    | while_expression
+    | print_expression
+    | read_expression
+    | unary_operator_expression
+    | group_expression
+    | index_expression
+    | array_expression
 
-  unary_operator_expression ::= unary_operator expression
-  unary_operator ::= "-" | "!"
-  binary_operator_expression ::= expression binary_operator expression
-  binary_operator ::= arithmetic_operator
-    | booolean_operator
+  block -> "{" block_content "}"
+  block_content -> statement_list | statement_list expression
+  assign_expression -> identifier "=" expression
+  if_expression -> "if" "(" expression ")" block | "if" "(" expression ")" block "else" block
+  while_expression -> "while" "(" expression ")" block
+  print_expression -> "print" "(" expression ")"
+  read_expression -> "read"
+  index_expression -> identifier "[" expression "]"
+  array_expression -> "[" array_elements "]"
+  array_elements -> constant | constant "," array_elements
+
+  unary_operator_expression -> unary_operator expression
+  unary_operator -> "-" | "!"
+  binary_operator_expression -> expression_no_binary binary_operator expression binary_operator_expression_
+  binary_operator_expression_ -> binary_operator expression binary_operator_expression_ | E
+  binary_operator -> arithmetic_operator
+    | boolean_operator
     | comparison_operator
-  arithmetic_operator ::= "+" | "-" | "*" | "/" | "%"
-  booolean_operator ::= "&&" | "||"
-  comparison_operator ::= "==" | "!=" | "<" | ">" | "<=" | ">="
-  group_expression ::= "(" expression ")"
+  arithmetic_operator -> "+" | "-" | "*" | "/" | "%"
+  boolean_operator -> "&&" | "||"
+  comparison_operator -> "==" | "!=" | "<" | ">" | "<=" | ">="
+  group_expression -> "(" expression ")"
 
-  type ::= basic_type | array_type
-  basic_type ::= "i32" | "char" | "bool"
-  array_type ::= "[" type ";" const_uint "]"
+  type -> basic_type | array_type
+  basic_type -> "i32" | "char" | "bool"
+  array_type -> "[" type ";" const_uint "]"
+
+                    program -> statement_list
+             statement_list -> statement
+                             | statement statement_list
+                  statement -> declare_statement
+                             | expression_statement
+                             | ";"
+          declare_statement -> "let" identifier ":" type ";"
+       expression_statement -> expression ";"
+                      const -> const_bool
+                             | const_char
+                             | const_string
+                             | const_int
+                 expression -> const_bool
+                             | const_char
+                             | const_string
+                             | const_int
+                             | identifier
+                             | assign_expression
+                             | if_expression
+                             | while_expression
+                             | print_expression
+                             | read_expression
+                             | unary_operator_expression
+                             | binary_operator_expression
+                             | group_expression
+                             | index_expression
+                             | array_expression
+       expression_no_binary -> const_bool
+                             | const_char
+                             | const_string
+                             | const_int
+                             | identifier
+                             | assign_expression
+                             | if_expression
+                             | while_expression
+                             | print_expression
+                             | read_expression
+                             | unary_operator_expression
+                             | group_expression
+                             | index_expression
+                             | array_expression
+                      block -> "{" block_content "}"
+              block_content -> "let" identifier ":" type ";"
+                             | const_bool ";"
+                             | const_char ";"
+                             | const_string ";"
+                             | const_int ";"
+                             | identifier ";"
+                             | assign_expression ";"
+                             | if_expression ";"
+                             | while_expression ";"
+                             | print_expression ";"
+                             | read_expression ";"
+                             | unary_operator_expression ";"
+                             | binary_operator_expression ";"
+                             | group_expression ";"
+                             | index_expression ";"
+                             | array_expression ";"
+                             | ";"
+                             | "let" identifier ":" type ";" statement_list
+                             | const_bool ";" statement_list
+                             | const_char ";" statement_list
+                             | const_string ";" statement_list
+                             | const_int ";" statement_list
+                             | identifier ";" statement_list
+                             | assign_expression ";" statement_list
+                             | if_expression ";" statement_list
+                             | while_expression ";" statement_list
+                             | print_expression ";" statement_list
+                             | read_expression ";" statement_list
+                             | unary_operator_expression ";" statement_list
+                             | binary_operator_expression ";" statement_list
+                             | group_expression ";" statement_list
+                             | index_expression ";" statement_list
+                             | array_expression ";" statement_list
+                             | ";" statement_list
+                             | "let" identifier ":" type ";" expression
+                             | const_bool ";" expression
+                             | const_char ";" expression
+                             | const_string ";" expression
+                             | const_int ";" expression
+                             | identifier ";" expression
+                             | assign_expression ";" expression
+                             | if_expression ";" expression
+                             | while_expression ";" expression
+                             | print_expression ";" expression
+                             | read_expression ";" expression
+                             | unary_operator_expression ";" expression
+                             | binary_operator_expression ";" expression
+                             | group_expression ";" expression
+                             | index_expression ";" expression
+                             | array_expression ";" expression
+                             | ";" expression
+                             | "let" identifier ":" type ";" statement_list expression
+                             | const_bool ";" statement_list expression
+                             | const_char ";" statement_list expression
+                             | const_string ";" statement_list expression
+                             | const_int ";" statement_list expression
+                             | identifier ";" statement_list expression
+                             | assign_expression ";" statement_list expression
+                             | if_expression ";" statement_list expression
+                             | while_expression ";" statement_list expression
+                             | print_expression ";" statement_list expression
+                             | read_expression ";" statement_list expression
+                             | unary_operator_expression ";" statement_list expression
+                             | binary_operator_expression ";" statement_list expression
+                             | group_expression ";" statement_list expression
+                             | index_expression ";" statement_list expression
+                             | array_expression ";" statement_list expression
+                             | ";" statement_list expression
+          assign_expression -> identifier "=" expression
+              if_expression -> "if" "(" expression ")" block
+           while_expression -> "while" "(" expression ")" block
+           print_expression -> "print" "(" expression ")"
+            read_expression -> "read"
+           index_expression -> identifier "[" expression "]"
+           array_expression -> "[" array_elements "]"
+             array_elements -> constant
+                             | constant "," array_elements
+  unary_operator_expression -> unary_operator expression
+             unary_operator -> "-"
+                             | "!"
+ binary_operator_expression -> const_bool binary_operator expression binary_operator_expression_
+                             | const_char binary_operator expression binary_operator_expression_
+                             | const_string binary_operator expression binary_operator_expression_
+                             | const_int binary_operator expression binary_operator_expression_
+                             | identifier binary_operator expression binary_operator_expression_
+                             | identifier "=" expression binary_operator expression binary_operator_expression_
+                             | "if" "(" expression ")" block binary_operator expression binary_operator_expression_
+                             | "while" "(" expression ")" block binary_operator expression binary_operator_expression_
+                             | "print" "(" expression ")" binary_operator expression binary_operator_expression_
+                             | "read" binary_operator expression binary_operator_expression_
+                             | "-" expression binary_operator expression binary_operator_expression_
+                             | "!" expression binary_operator expression binary_operator_expression_
+                             | group_expression binary_operator expression binary_operator_expression_
+                             | identifier "[" expression "]" binary_operator expression binary_operator_expression_
+                             | "[" array_elements "]" binary_operator expression binary_operator_expression_
+binary_operator_expression_ -> binary_operator expression binary_operator_expression_
+                             | E
+            binary_operator -> arithmetic_operator
+                             | boolean_operator
+                             | comparison_operator
+        arithmetic_operator -> "+"
+                             | "-"
+                             | "*"
+                             | "/"
+                             | "%"
+           boolean_operator -> "&&"
+                             | "||"
+        comparison_operator -> "=="
+                             | "!="
+                             | "<"
+                             | ">"
+                             | "<="
+                             | ">="
+           group_expression -> "(" expression ")"
+                       type -> basic_type
+                             | array_type
+                 basic_type -> "i32"
+                             | "char"
+                             | "bool"
+                 array_type -> "[" type ";" const_uint "]"
+

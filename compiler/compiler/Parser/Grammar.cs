@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using compiler.Grammar;
 using Newtonsoft.Json;
 
 namespace compiler.Parser
@@ -27,8 +28,20 @@ namespace compiler.Parser
 
         public List<List<string>> GetProductions(string nonTerminal)
         {
-            return Data.ProductionRules.Where(rule => rule.Key.Contains(nonTerminal)).Select(rule => rule.Productions)
+            IEnumerable<ProductionRule> productionRules = Data.ProductionRules.Where(rule => rule.Key.Contains(nonTerminal)).ToList();
+
+            if (!productionRules.Any())
+            {
+                return new List<List<string>>();
+            }
+
+            return productionRules.Select(rule => rule.Productions)
                 .Aggregate((p1, p2) => p1.Union(p2).ToList()).ToList();
+        }
+
+        public bool CheckIfTerminal(string symbol)
+        {
+            return Data.Terminals.Contains(symbol);
         }
     }
 }

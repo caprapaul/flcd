@@ -14,7 +14,7 @@ namespace compiler_tests
         {
             var grammar = new Grammar();
             grammar.LoadData("g2.json");
-            _parser = new Parser(grammar, new List<string>());
+            _parser = new Parser(grammar);
         }
         
         [TestMethod]
