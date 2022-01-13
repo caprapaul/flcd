@@ -43,7 +43,7 @@ namespace compiler.Parser
             {
                 string productions = rule.Productions.Select(r => string.Join(" ", r))
                     .Aggregate((p1, p2) => $"{p1} | {p2}");
-                return $"{string.Join(" ", rule.Key)} -> {productions}";
+                return $"{string.Join(" ", rule.Key)} : {productions}";
             }).Aggregate((p1, p2) => p1 + "\n" + p2);
 
             return $"NonTerminals: {nonTerminals}\n" +

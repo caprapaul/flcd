@@ -1,0 +1,42 @@
+%{
+#include <stdio.h>
+#include "lang.tab.h"
+
+int lines = 0;
+%}
+
+%option noyywrap
+%option caseless
+
+KEYWORD	let|if|else|while|i32|bool|char|print|read
+COMPOSED_OPERATOR	"<="|"=="|">="|"&&"|"||"
+OPERATOR 	\=|\+|\-|\*|\/|\<|\>|\!|\%
+SEPARATOR	\(|\)|\[|\]|\{|\}|\:|\;
+CONST_STRING	\"[a-zA-Z0-9 _]*\"
+CONST_INT	[0-9]+
+CONST_CHAR	\'[a-zA-Z0-9 _]\'
+CONST_BOOL	true|false
+CONSTANT	{CONST_INT}|{CONST_STRING}|{CONST_CHAR}|{CONST_BOOL}
+IDENTIFIER	[a-zA-Z_][a-zA-Z0-9_]*
+
+%%
+
+[ \t]
+[\n]+ {lines++;}
+
+let	{return LET;}
+if	{return IF;}
+else	{return ELSE;}
+while	{return WHILE;}
+i32	{return I32;}
+bool	{return BOOL;}
+char	{return CHAR;}
+print	{return PRINT;}
+read	{return READ;}
+{COMPOSED_OPERATOR}	{return COMPOSED_OPERATOR;}
+{OPERATOR}|{SEPARATOR}	{return yytext[0];}
+{CONSTANT}	{return CONSTANT;}
+{IDENTIFIER}	{return IDENTIFIER;}
+
+. { printf("Error on line %d\n", lines + 1); return -1; }
+%%

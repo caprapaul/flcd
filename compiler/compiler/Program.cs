@@ -98,7 +98,7 @@ namespace compiler
                 using var writer = new StreamWriter("parser_out1.txt");
                 writer.Write(output.ToString());
             }
-            catch (Exception e)
+            catch (Exception e) 
             {
                 Console.WriteLine(e.Message);
             }
@@ -106,11 +106,13 @@ namespace compiler
             try
             {
                 grammar.LoadData("g2.json");
+                Console.WriteLine(grammar.Data);
                 var parser = services.GetRequiredService<Parser.Parser>();
                 
                 Console.WriteLine("Parsing 'p1.txt' with grammar 'g2.json'...");
                 ParserOutput output = parser.Run(pif.Items.Select((entry) => entry.Item1).ToList());
                 Console.WriteLine("Done");
+                
                 using var writer = new StreamWriter("parser_out2.txt");
 
                 writer.Write(output.ToString());

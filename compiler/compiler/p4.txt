@@ -1,1 +1,3 @@
-( a + a ) * ( a + a )
+let x: i32;
+x = read;
+print(x);

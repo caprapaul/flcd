@@ -1,7 +1,9 @@
 # Documentation
 
-###### Source code: https://github.com/caprapaul/flcd/tree/lab_06
+###### Source code: https://github.com/caprapaul/flcd/tree/lab_07
 
 ## Parser
 
-Recursive Descendent
+Method: Recursive Descendent
+
+Output: Table

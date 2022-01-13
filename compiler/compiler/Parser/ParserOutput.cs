@@ -20,17 +20,17 @@ namespace compiler.Parser
             var newWorkingStack = new Stack<(string symbol, int index)>(workingStack);
             
             
-            ConstructTree(newWorkingStack, grammar, -1);
+            ConstructTree(newWorkingStack, grammar, -1,-1);
         }
 
-        private void ConstructTree(Stack<(string value, int index)> workingStack, Grammar grammar, int currentSiblingIndex)
+        private void ConstructTree(Stack<(string value, int index)> workingStack, Grammar grammar, int currentParentIndex, int currentSiblingIndex)
         {
             (string symbol, int index) = workingStack.Pop();
             int currentIndex = _nodes.Count;
             _nodes.Add(new Node
             {
                 Info = symbol,
-                Parent = currentIndex - 1,
+                Parent = currentParentIndex,
                 RightSibling = currentSiblingIndex
             });
 
@@ -65,7 +65,7 @@ namespace compiler.Parser
                 else
                 {
                     int count = _nodes.Count;
-                    ConstructTree(workingStack, grammar, siblingIndex);
+                    ConstructTree(workingStack, grammar, currentIndex, siblingIndex);
                     siblingIndex = count;
                 }
             }
