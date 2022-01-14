@@ -1,12 +1,11 @@
 %{
 #include <stdio.h>
 #include "lang.tab.h"
-
-int lines = 0;
 %}
 
 %option noyywrap
 %option caseless
+%option yylineno
 
 KEYWORD	let|if|else|while|i32|bool|char|print|read
 COMPOSED_OPERATOR	"<="|"=="|">="|"&&"|"||"
@@ -21,22 +20,21 @@ IDENTIFIER	[a-zA-Z_][a-zA-Z0-9_]*
 
 %%
 
-[ \t]
-[\n]+ {lines++;}
+[ \t\n]
 
-let	{return LET;}
-if	{return IF;}
-else	{return ELSE;}
-while	{return WHILE;}
-i32	{return I32;}
-bool	{return BOOL;}
-char	{return CHAR;}
-print	{return PRINT;}
-read	{return READ;}
-{COMPOSED_OPERATOR}	{return COMPOSED_OPERATOR;}
-{OPERATOR}|{SEPARATOR}	{return yytext[0];}
-{CONSTANT}	{return CONSTANT;}
-{IDENTIFIER}	{return IDENTIFIER;}
+let	{printf("%s\n", yytext);return LET;}
+if	{printf("%s\n", yytext);return IF;}
+else	{printf("%s\n", yytext);return ELSE;}
+while	{printf("%s\n", yytext);return WHILE;}
+i32	{printf("%s\n", yytext);return INT;}
+bool	{printf("%s\n", yytext);return BOOL;}
+char	{printf("%s\n", yytext);return CHAR;}
+print	{printf("%s\n", yytext);return PRINT;}
+read	{printf("%s\n", yytext);return READ;}
+{COMPOSED_OPERATOR}	{printf("%s\n", yytext);return COMPOSED_OPERATOR;}
+{OPERATOR}|{SEPARATOR}	{printf("%s\n", yytext);return yytext[0];}
+{CONSTANT}	{printf("%s\n", yytext);return CONSTANT;}
+{IDENTIFIER}	{printf("%s\n", yytext);return IDENTIFIER;}
 
-. { printf("Error on line %d\n", lines + 1); return -1; }
+. { printf("Error on line %d\n", yylineno); return -1; }
 %%

@@ -1,9 +1,5 @@
 # Documentation
 
-###### Source code: https://github.com/caprapaul/flcd/tree/lab_07
+###### Source code: https://github.com/caprapaul/flcd/tree/lab_09
 
-## Parser
-
-Method: Recursive Descendent
-
-Output: Table
+Used flex + bison.
